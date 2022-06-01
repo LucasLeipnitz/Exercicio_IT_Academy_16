@@ -21,7 +21,7 @@ class Logic:
     create_database()
     entrada: nenhuma
     saída: nenhuma
-    objetivo: responsável por criar o arquivo SQLite do banco de dados e a tabela Research, chamar csv_reader para ler o arquivo csv e salvar as linhas em memória e adicionar cada linha ao banco dados.
+    objetivo: responsável por criar o arquivo SQLite do banco de dados e a tabela Medicamentos, chamar csv_reader para ler o arquivo csv e salvar as linhas em memória e adicionar cada linha ao banco dados.
     '''
     def create_database(self):
         self.base.open_connection()
@@ -42,7 +42,16 @@ class Logic:
         self.base.open_connection()
         consult = self.base.select_by_name(name)
         self.base.close_connection()
-        return consult
+        meds = []
+        for medicine in consult:
+            new_med = []
+            new_med.append(medicine[0])
+            new_med.append(medicine[8])
+            new_med.append(medicine[9])
+            new_med.append(medicine[13])
+            new_med.append(medicine[23])
+            meds.append(tuple(new_med))
+        return meds
 
     '''
     consult_code():
@@ -54,7 +63,22 @@ class Logic:
         self.base.open_connection()
         consult = self.base.select_by_code(code)
         self.base.close_connection()
-        return consult[0], consult[-1]
+        meds = []
+        new_med = []
+        new_med.append(consult[0][0])
+        new_med.append(consult[0][8])
+        new_med.append(consult[0][9])
+        new_med.append(float(consult[0][13].replace(',','.')))
+        new_med.append(float(consult[0][23].replace(',','.')))
+        meds.append(tuple(new_med))
+        new_med = []
+        new_med.append(consult[-1][0])
+        new_med.append(consult[-1][8])
+        new_med.append(consult[-1][9])
+        new_med.append(float(consult[-1][13].replace(',','.')))
+        new_med.append(float(consult[-1][23].replace(',','.')))
+        meds.append(tuple(new_med))
+        return meds
 
     def compare(self):
         self.base.open_connection()
@@ -68,3 +92,11 @@ class Logic:
         positive_percent = positive_counter*100/total
         neutral_percent = neutral_counter*100/total
         return negative_percent, neutral_percent, positive_percent
+
+logic = Logic()
+#print(logic.consult_name("MONTELUCASTE")[0][0])
+logic.consult_name("MONTELUCASTE")
+#consult1, consult2 = logic.consult_code('7891317421618')
+#print(consult1[23])
+#print(consult2[23])
+#print(logic.compare())
