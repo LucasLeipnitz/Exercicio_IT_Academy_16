@@ -63,23 +63,33 @@ class Logic:
         self.base.open_connection()
         consult = self.base.select_by_code(code)
         self.base.close_connection()
-        meds = []
-        new_med = []
-        new_med.append(consult[0][0])
-        new_med.append(consult[0][8])
-        new_med.append(consult[0][9])
-        new_med.append(float(consult[0][13].replace(',','.')))
-        new_med.append(float(consult[0][23].replace(',','.')))
-        meds.append(tuple(new_med))
-        new_med = []
-        new_med.append(consult[-1][0])
-        new_med.append(consult[-1][8])
-        new_med.append(consult[-1][9])
-        new_med.append(float(consult[-1][13].replace(',','.')))
-        new_med.append(float(consult[-1][23].replace(',','.')))
-        meds.append(tuple(new_med))
+        if(len(consult) == 0):
+            return None
+        else:
+            meds = []
+            new_med = []
+            new_med.append(consult[0][0])
+            new_med.append(consult[0][8])
+            new_med.append(consult[0][9])
+            new_med.append(float(consult[0][13].replace(',','.')))
+            new_med.append(float(consult[0][23].replace(',','.')))
+            meds.append(tuple(new_med))
+            new_med = []
+            new_med.append(consult[-1][0])
+            new_med.append(consult[-1][8])
+            new_med.append(consult[-1][9])
+            new_med.append(float(consult[-1][13].replace(',','.')))
+            new_med.append(float(consult[-1][23].replace(',','.')))
+            meds.append(tuple(new_med))
         return meds
 
+
+    '''
+    compare()):
+    entrada:
+    saída: três inteiros que prepresentam as porcentagens
+    objetivo: faz a comparação de avaliações PIS/COFINS
+    '''
     def compare(self):
         self.base.open_connection()
         neutral_counter = self.base.count_by_pis_cofins("Neutra")[0][0]
@@ -93,10 +103,3 @@ class Logic:
         neutral_percent = neutral_counter*100/total
         return negative_percent, neutral_percent, positive_percent
 
-logic = Logic()
-#print(logic.consult_name("MONTELUCASTE")[0][0])
-logic.consult_name("MONTELUCASTE")
-#consult1, consult2 = logic.consult_code('7891317421618')
-#print(consult1[23])
-#print(consult2[23])
-#print(logic.compare())

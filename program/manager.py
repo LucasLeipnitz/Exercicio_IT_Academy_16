@@ -65,7 +65,7 @@ class Manager:
             self.interface.error(" Opção inválida: não é um número")
             return -1
         except NotImplementedError:
-            self.interface.error(" Escolha uma opção éntre 1 e 5")
+            self.interface.error(" Escolha uma opção éntre 1 e 4")
             return -1
     
     '''
@@ -75,11 +75,9 @@ class Manager:
     objetivo: para a tarefa 4, converte para int se possível. Para as demais, filtra e converte para maiusculo a string em data.
     '''
     def treat_data(self, data):
-        if(self.option == 4):
+        if(self.option == 2):
             try:
                 data = int(data)
-                if(data > 2 or data < 1):
-                    raise NotImplementedError
                 return data
             except ValueError:
                 self.interface.error(" Opção inválida: não é um número")
@@ -133,14 +131,15 @@ class Manager:
     Se a pesquisa retornar None, chama a interface para imprimir um erro.
     '''
     def task_2(self):
-        consult = self.logic.consult_code(self.data)
-        self.interface.header("RESULTADO DA PESQUISA")
-        if(consult is None):
-            self.interface.error(" Nenhum remédio encontrado com este código")
-        else:
-            for medicine in consult:
-                self.add_medicine(medicine)
-            self.interface.data_show_2(self.medicines)
+        if(self.data != -1):
+            consult = self.logic.consult_code(self.data)
+            self.interface.header("RESULTADO DA PESQUISA")
+            if(consult is None):
+                self.interface.error(" Nenhum remédio encontrado com este código")
+            else:
+                for medicine in consult:
+                    self.add_medicine(medicine)
+                self.interface.data_show_2(self.medicines)
 
         self.option = -1
 
@@ -191,7 +190,6 @@ class Manager:
                     self.data = self.treat_data(self.data)
                     self.task_2()
                 elif(self.option == 3):
-                    self.data = self.treat_data(self.data)
                     self.task_3()
                 elif(self.option == 4):
                     self.task_4()
